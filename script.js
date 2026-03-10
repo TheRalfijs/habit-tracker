@@ -10,14 +10,11 @@ function getTodayDate() {
 }
 
 function resetHabitsIfNewDay() {
-
     const lastSavedDate = localStorage.getItem("lastSavedDate");
     const today = getTodayDate();
 
     if (lastSavedDate !== today) {
-
         habits = habits.map(habit => {
-
             if (habit.done) {
                 habit.streak = (habit.streak || 0) + 1;
             } else {
@@ -25,7 +22,6 @@ function resetHabitsIfNewDay() {
             }
 
             habit.done = false;
-
             return habit;
         });
 
@@ -40,8 +36,21 @@ function deleteHabit(index) {
     renderHabits();
 }
 
-function updateProgress() {
+function editHabit(index) {
+    const newName = prompt("Edit habit name:", habits[index].name);
 
+    if (newName === null) return;
+
+    const trimmedName = newName.trim();
+
+    if (trimmedName === "") return;
+
+    habits[index].name = trimmedName;
+    saveHabits();
+    renderHabits();
+}
+
+function updateProgress() {
     const progressText = document.getElementById("progressText");
 
     const total = habits.length;
@@ -57,12 +66,10 @@ function updateProgress() {
 }
 
 function renderHabits() {
-
     const habitList = document.getElementById("habitList");
     habitList.innerHTML = "";
 
     habits.forEach((habit, index) => {
-
         const li = document.createElement("li");
 
         const checkbox = document.createElement("input");
@@ -78,15 +85,21 @@ function renderHabits() {
         const text = document.createElement("span");
         text.textContent = `${habit.name} — 🔥 ${habit.streak || 0} day streak`;
 
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.onclick = function () {
+            editHabit(index);
+        };
+
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
-
         deleteButton.onclick = function () {
             deleteHabit(index);
         };
 
         li.appendChild(checkbox);
         li.appendChild(text);
+        li.appendChild(editButton);
         li.appendChild(deleteButton);
 
         habitList.appendChild(li);
@@ -96,7 +109,6 @@ function renderHabits() {
 }
 
 function addHabit() {
-
     const input = document.getElementById("habitInput");
     const habitText = input.value.trim();
 
@@ -114,11 +126,11 @@ function addHabit() {
     input.value = "";
 }
 
-resetHabitsIfNewDay();
-renderHabits();
-
 document.getElementById("habitInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         addHabit();
     }
 });
+
+resetHabitsIfNewDay();
+renderHabits();
