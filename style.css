@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: #06163a;
+    background: #e8edf5;
     text-align: center;
     padding: 30px;
     margin: 0;
@@ -10,22 +10,22 @@ body {
 .container {
     max-width: 760px;
     margin: 40px auto;
-    background: #1f2c44;
+    background: #ffffff;
     padding: 32px;
     border-radius: 24px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
 h1 {
     margin: 0 0 10px;
-    color: #f9fafb;
+    color: #111827;
     letter-spacing: 1px;
     font-size: 52px;
 }
 
 .subtitle {
     margin: 0 0 28px;
-    color: #c5cedd;
+    color: #6b7280;
     font-size: 18px;
 }
 
@@ -42,15 +42,15 @@ input {
     padding: 14px 16px;
     width: 280px;
     font-size: 16px;
-    border: 1px solid #51607d;
+    border: 1px solid #c7d0dd;
     border-radius: 14px;
     outline: none;
-    background: #3b4861;
-    color: #f9fafb;
+    background: #f8fafc;
+    color: #111827;
 }
 
 input::placeholder {
-    color: #d1d5db;
+    color: #6b7280;
 }
 
 button {
@@ -83,7 +83,7 @@ button:active {
 #progressText {
     margin: 12px 0 14px;
     font-weight: bold;
-    color: #f3f4f6;
+    color: #1f2937;
     font-size: 18px;
 }
 
@@ -91,7 +91,7 @@ button:active {
     width: 100%;
     max-width: 500px;
     height: 18px;
-    background: #cfcfcf;
+    background: #d1d5db;
     border-radius: 999px;
     margin: 0 auto 28px;
     overflow: hidden;
@@ -101,7 +101,7 @@ button:active {
 #progressFill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #7e8796, #b5bcc8);
+    background: linear-gradient(90deg, #4a4a4a, #6b6b6b);
     border-radius: 999px;
     position: relative;
     transition: width 0.35s ease;
@@ -113,7 +113,7 @@ button:active {
     right: -10px;
     top: 50%;
     transform: translateY(-50%);
-    border-left: 10px solid #b5bcc8;
+    border-left: 10px solid #6b6b6b;
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
 }
@@ -128,7 +128,7 @@ button:active {
 
 .week-label {
     font-size: 12px;
-    color: #d1d5db;
+    color: #6b7280;
     text-align: center;
 }
 
@@ -139,7 +139,7 @@ ul {
 
 li {
     list-style: none;
-    background: #31415c;
+    background: #f3f6fb;
     margin-bottom: 16px;
     padding: 18px 18px;
     border-radius: 18px;
@@ -147,10 +147,11 @@ li {
     justify-content: space-between;
     align-items: center;
     gap: 18px;
+    border: 1px solid #dbe3ef;
 }
 
 .completed {
-    background: rgba(34, 197, 94, 0.22) !important;
+    background: rgba(34, 197, 94, 0.14) !important;
 }
 
 .completed span {
@@ -185,7 +186,7 @@ li {
     flex: 1;
     text-align: left;
     font-size: 16px;
-    color: #f9fafb;
+    color: #111827;
     word-break: break-word;
     line-height: 1.35;
 }
@@ -219,7 +220,7 @@ li {
 .day {
     width: 26px;
     height: 26px;
-    background: #5d6a80;
+    background: #c0c8d4;
     border-radius: 8px;
 }
 
@@ -235,6 +236,76 @@ li {
 
 .pop {
     animation: pop 0.25s ease;
+}
+
+/* DARK MODE */
+body.dark {
+    background: #06163a;
+    color: #f9fafb;
+}
+
+body.dark .container {
+    background: #1f2c44;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+}
+
+body.dark h1 {
+    color: #f9fafb;
+}
+
+body.dark .subtitle {
+    color: #c5cedd;
+}
+
+body.dark input {
+    background: #3b4861;
+    color: #f9fafb;
+    border: 1px solid #51607d;
+}
+
+body.dark input::placeholder {
+    color: #d1d5db;
+}
+
+body.dark #progressText {
+    color: #f3f4f6;
+}
+
+body.dark .progress-bar {
+    background: #cfcfcf;
+}
+
+body.dark #progressFill {
+    background: linear-gradient(90deg, #7e8796, #b5bcc8);
+}
+
+body.dark #progressFill::after {
+    border-left-color: #b5bcc8;
+}
+
+body.dark .week-label {
+    color: #d1d5db;
+}
+
+body.dark li {
+    background: #31415c;
+    border: 1px solid transparent;
+}
+
+body.dark .completed {
+    background: rgba(34, 197, 94, 0.22) !important;
+}
+
+body.dark .habit-top-row span {
+    color: #f9fafb;
+}
+
+body.dark .day {
+    background: #5d6a80;
+}
+
+body.dark .day.done {
+    background: #4ade80;
 }
 
 @media (max-width: 700px) {
