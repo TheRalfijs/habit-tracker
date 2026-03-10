@@ -116,3 +116,9 @@ function addHabit() {
 
 resetHabitsIfNewDay();
 renderHabits();
+
+document.getElementById("habitInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        addHabit();
+    }
+});
