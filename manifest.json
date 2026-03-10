@@ -1,0 +1,16 @@
+{
+  "name": "Forge Tracker",
+  "short_name": "Forge",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06163a",
+  "theme_color": "#06163a",
+  "description": "Build discipline every day.",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
