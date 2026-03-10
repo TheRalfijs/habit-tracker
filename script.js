@@ -134,3 +134,19 @@ document.getElementById("habitInput").addEventListener("keypress", function(even
 
 resetHabitsIfNewDay();
 renderHabits();
+function updateProgress() {
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+
+    const total = habits.length;
+    const completed = habits.filter(habit => habit.done).length;
+
+    let percent = 0;
+
+    if (total > 0) {
+        percent = Math.round((completed / total) * 100);
+    }
+
+    progressText.textContent = `${completed} of ${total} habits completed — ${percent}%`;
+    progressFill.style.width = `${percent}%`;
+}

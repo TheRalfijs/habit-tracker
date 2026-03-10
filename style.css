@@ -94,3 +94,34 @@ li button:nth-of-type(1) {
 li button:nth-of-type(2) {
     background: #dc2626;
 }
+.progress-bar {
+    width: 100%;
+    max-width: 500px;
+    height: 18px;
+    background: #cfcfcf; /* Nardo gray */
+    border-radius: 999px;
+    margin: 20px auto;
+    overflow: hidden;
+    position: relative;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0%;
+    background: #4a4a4a; /* darker Nardo gray */
+    border-radius: 999px;
+    position: relative;
+    transition: width 0.35s ease;
+}
+
+/* triangle arrow tip */
+#progressFill::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 10px solid #4a4a4a;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+}
