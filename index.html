@@ -42,7 +42,13 @@
             <div id="progressFill"></div>
         </div>
 
-        <div id="weekLabels" class="week-labels"></div>
+        <div class="data-actions">
+    <button id="exportButton">Export Data</button>
+    <button id="importButton">Import Data</button>
+    <input type="file" id="importFile" accept=".json" hidden>
+</div>
+
+<div id="weekLabels" class="week-labels"></div>
 
         <ul id="habitList"></ul>
     </div>

@@ -29,7 +29,8 @@ function normalizeHabits() {
         name: habit.name || "Untitled Habit",
         category: habit.category || "Other",
         done: Boolean(habit.done),
-        history: Array.isArray(habit.history) ? [...new Set(habit.history)] : []
+        history: Array.isArray(habit.history) ? [...new Set(habit.history)] : [],
+        notes: habit.notes || ""
     }));
 
     saveHabits();
@@ -82,6 +83,62 @@ function calculateStreak(history, isDoneToday) {
     return streak;
 }
 
+function calculateStats(history) {
+    if (!history || history.length === 0) {
+        return {
+            bestStreak: 0,
+            completionRate: 0
+        };
+    }
+
+    const sorted = [...history].sort();
+    let bestStreak = 1;
+    let current = 1;
+
+    for (let i = 1; i < sorted.length; i++) {
+        const prev = new Date(sorted[i - 1]);
+        const curr = new Date(sorted[i]);
+
+        const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+
+        if (diff === 1) {
+            current++;
+            if (current > bestStreak) {
+                bestStreak = current;
+            }
+        } else {
+            current = 1;
+        }
+    }
+
+    const completionRate = Math.min(100, Math.round((history.length / 30) * 100));
+
+    return {
+        bestStreak,
+        completionRate
+    };
+}
+
+function getAchievementBadge(streak) {
+    if (streak >= 100) {
+        return "👑 Unbreakable";
+    }
+
+    if (streak >= 30) {
+        return "⚔️ Disciplined";
+    }
+
+    if (streak >= 7) {
+        return "🔥 On Fire";
+    }
+
+    if (streak >= 1) {
+        return "🌱 First Step";
+    }
+
+    return "";
+}
+
 function deleteHabit(index) {
     habits.splice(index, 1);
     saveHabits();
@@ -97,6 +154,16 @@ function editHabit(index) {
     if (trimmedName === "") return;
 
     habits[index].name = trimmedName;
+    saveHabits();
+    renderHabits();
+}
+
+function editNotes(index) {
+    const newNote = prompt("Habit notes:", habits[index].notes || "");
+
+    if (newNote === null) return;
+
+    habits[index].notes = newNote;
     saveHabits();
     renderHabits();
 }
@@ -211,7 +278,10 @@ function createHabitRow(habit, index) {
 
     const title = document.createElement("span");
     const streak = calculateStreak(habit.history, habit.done);
-    title.textContent = `${habit.name} — 🔥 ${streak} day streak`;
+    const stats = calculateStats(habit.history);
+    const badge = getAchievementBadge(streak);
+
+    title.textContent = `${habit.name} — 🔥 ${streak} | 🏆 ${stats.bestStreak} | 📊 ${stats.completionRate}%`;
 
     topRow.appendChild(checkbox);
     topRow.appendChild(title);
@@ -220,6 +290,20 @@ function createHabitRow(habit, index) {
 
     main.appendChild(topRow);
     main.appendChild(weekContainer);
+
+    if (badge) {
+        const badgeElement = document.createElement("div");
+        badgeElement.classList.add("habit-badge");
+        badgeElement.textContent = badge;
+        main.appendChild(badgeElement);
+    }
+
+    if (habit.notes) {
+        const note = document.createElement("div");
+        note.classList.add("habit-note");
+        note.textContent = "📝 " + habit.notes;
+        main.appendChild(note);
+    }
 
     const actions = document.createElement("div");
     actions.classList.add("habit-actions");
@@ -230,6 +314,12 @@ function createHabitRow(habit, index) {
         editHabit(index);
     };
 
+    const noteButton = document.createElement("button");
+    noteButton.textContent = "Notes";
+    noteButton.onclick = function () {
+        editNotes(index);
+    };
+
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.onclick = function () {
@@ -237,6 +327,7 @@ function createHabitRow(habit, index) {
     };
 
     actions.appendChild(editButton);
+    actions.appendChild(noteButton);
     actions.appendChild(deleteButton);
 
     li.appendChild(main);
@@ -250,7 +341,6 @@ function createCategoryHeader(category) {
     header.classList.add("category-header");
     header.textContent = category;
 
-    // make it visible even if CSS is weak
     header.style.listStyle = "none";
     header.style.textAlign = "left";
     header.style.fontWeight = "800";
@@ -322,7 +412,8 @@ function addHabit() {
         name: habitText,
         category: selectedCategory,
         done: false,
-        history: []
+        history: [],
+        notes: ""
     });
 
     saveHabits();
@@ -367,6 +458,66 @@ themeToggle.addEventListener("click", function () {
     renderHabits();
     updateThemeButtonText();
 });
+
+const exportButton = document.getElementById("exportButton");
+const importButton = document.getElementById("importButton");
+const importFile = document.getElementById("importFile");
+
+if (exportButton && importButton && importFile) {
+    exportButton.addEventListener("click", function () {
+        const data = {
+            habits: habits,
+            exportedAt: new Date().toISOString()
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+            type: "application/json"
+        });
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = "forge-tracker-backup.json";
+        a.click();
+
+        URL.revokeObjectURL(url);
+    });
+
+    importButton.addEventListener("click", function () {
+        importFile.click();
+    });
+
+    importFile.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            try {
+                const importedData = JSON.parse(e.target.result);
+
+                if (!importedData.habits || !Array.isArray(importedData.habits)) {
+                    alert("Invalid backup file.");
+                    return;
+                }
+
+                habits = importedData.habits;
+                normalizeHabits();
+                saveHabits();
+                renderHabits();
+
+                alert("Data imported successfully.");
+            } catch (error) {
+                alert("Failed to import file.");
+            }
+        };
+
+        reader.readAsText(file);
+        importFile.value = "";
+    });
+}
 
 normalizeHabits();
 applySavedTheme();

@@ -81,6 +81,22 @@ button:active {
     transform: scale(0.98);
 }
 
+.data-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 8px 0 22px;
+}
+
+#exportButton {
+    background: #0f766e;
+}
+
+#importButton {
+    background: #7c3aed;
+}
+
 #themeToggle {
     margin-bottom: 26px;
     background: #374151;
@@ -161,6 +177,18 @@ li {
     padding-left: 6px;
 }
 
+.habit-row {
+    background: #f3f6fb;
+    margin-bottom: 16px;
+    padding: 18px 18px;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid #dbe3ef;
+}
+
 .habit-main {
     flex: 1;
     display: flex;
@@ -193,25 +221,6 @@ li {
     line-height: 1.35;
 }
 
-.habit-actions {
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.habit-actions button {
-    min-width: 72px;
-    padding: 12px 14px;
-}
-
-.habit-actions button:first-child {
-    background: #2563eb;
-}
-
-.habit-actions button:last-child {
-    background: #dc2626;
-}
-
 .week-inline {
     display: grid;
     grid-template-columns: repeat(7, 26px);
@@ -230,16 +239,54 @@ li {
     background: #4ade80;
 }
 
-.habit-row {
-    background: #f3f6fb;
-    margin-bottom: 16px;
-    padding: 18px 18px;
-    border-radius: 18px;
+.day.missed {
+    background: #ef4444;
+}
+
+.habit-badge {
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.10);
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    padding: 6px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    width: fit-content;
+    margin-left: 32px;
+}
+
+.habit-note {
+    font-size: 13px;
+    opacity: 0.78;
+    text-align: left;
+    color: #475569;
+    margin-left: 32px;
+    line-height: 1.4;
+}
+
+.habit-actions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 18px;
-    border: 1px solid #dbe3ef;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.habit-actions button {
+    min-width: 72px;
+    padding: 12px 14px;
+}
+
+.habit-actions button:first-child {
+    background: #2563eb;
+}
+
+.habit-actions button:nth-child(2) {
+    background: #7c3aed;
+}
+
+.habit-actions button:last-child {
+    background: #dc2626;
 }
 
 .completed {
@@ -335,12 +382,21 @@ body.dark .day {
 body.dark .day.done {
     background: #4ade80;
 }
-.day.missed {
-    background: #ef4444;
-}
+
 body.dark .day.missed {
     background: #f87171;
 }
+
+body.dark .habit-badge {
+    color: #d8b4fe;
+    background: rgba(124, 58, 237, 0.18);
+    border: 1px solid rgba(216, 180, 254, 0.20);
+}
+
+body.dark .habit-note {
+    color: #d1d5db;
+}
+
 @media (max-width: 700px) {
     body {
         padding: 14px;
@@ -368,6 +424,15 @@ body.dark .day.missed {
     select,
     #addHabitButton,
     #themeToggle {
+        width: 100%;
+    }
+
+    .data-actions {
+        flex-direction: column;
+    }
+
+    #exportButton,
+    #importButton {
         width: 100%;
     }
 
@@ -399,5 +464,10 @@ body.dark .day.missed {
     .day {
         width: 22px;
         height: 22px;
+    }
+
+    .habit-badge,
+    .habit-note {
+        margin-left: 32px;
     }
 }
