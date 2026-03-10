@@ -335,7 +335,12 @@ body.dark .day {
 body.dark .day.done {
     background: #4ade80;
 }
-
+.day.missed {
+    background: #ef4444;
+}
+body.dark .day.missed {
+    background: #f87171;
+}
 @media (max-width: 700px) {
     body {
         padding: 14px;

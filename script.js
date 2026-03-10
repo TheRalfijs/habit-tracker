@@ -142,10 +142,13 @@ function createWeekSquares(history) {
     weekContainer.classList.add("week-inline");
 
     const monday = getMondayOfCurrentWeek();
+    const today = getCurrentDateObject();
+    today.setHours(0, 0, 0, 0);
 
     for (let i = 0; i < 7; i++) {
         const day = new Date(monday);
         day.setDate(monday.getDate() + i);
+        day.setHours(0, 0, 0, 0);
 
         const dateString = getDateString(day);
 
@@ -154,6 +157,8 @@ function createWeekSquares(history) {
 
         if (history.includes(dateString)) {
             square.classList.add("done");
+        } else if (day < today) {
+            square.classList.add("missed");
         }
 
         weekContainer.appendChild(square);
