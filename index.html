@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Habit Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge Tracker</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="container">
-        <h1>Habit Tracker</h1>
+        <button id="themeToggle">Dark Mode</button>
+
+        <h1 id="appTitle">FORGE TRACKER</h1>
+        <p class="subtitle">Build discipline every day</p>
 
         <div class="input-row">
-            <input id="habitInput" placeholder="Enter habit">
-            <button onclick="addHabit()">Add Habit</button>
+            <input id="habitInput" type="text" placeholder="Enter habit">
+            <button id="addHabitButton" onclick="addHabit()">Add Habit</button>
         </div>
 
         <p id="progressText">0 of 0 habits completed — 0%</p>
@@ -21,10 +26,11 @@
             <div id="progressFill"></div>
         </div>
 
+        <div id="weekLabels" class="week-labels"></div>
+
         <ul id="habitList"></ul>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>

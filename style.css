@@ -1,106 +1,99 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f3f4f6;
+    background: #06163a;
     text-align: center;
     padding: 30px;
     margin: 0;
+    color: #111827;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 760px;
     margin: 40px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    background: #1f2c44;
+    padding: 32px;
+    border-radius: 24px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
 }
 
 h1 {
-    margin-bottom: 20px;
-    color: #111827;
+    margin: 0 0 10px;
+    color: #f9fafb;
+    letter-spacing: 1px;
+    font-size: 52px;
+}
+
+.subtitle {
+    margin: 0 0 28px;
+    color: #c5cedd;
+    font-size: 18px;
 }
 
 .input-row {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+    margin-bottom: 16px;
 }
 
 input {
-    padding: 12px;
-    width: 250px;
+    padding: 14px 16px;
+    width: 280px;
     font-size: 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
+    border: 1px solid #51607d;
+    border-radius: 14px;
+    outline: none;
+    background: #3b4861;
+    color: #f9fafb;
+}
+
+input::placeholder {
+    color: #d1d5db;
 }
 
 button {
-    padding: 12px 16px;
+    padding: 14px 18px;
     font-size: 14px;
     cursor: pointer;
     border: none;
-    border-radius: 10px;
+    border-radius: 14px;
     background: #111827;
     color: white;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 button:hover {
-    opacity: 0.9;
+    opacity: 0.92;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#themeToggle {
+    margin-bottom: 26px;
+    background: #374151;
+    color: white;
+    border: 2px solid #d6c9a8;
+    padding: 12px 18px;
 }
 
 #progressText {
-    margin-top: 20px;
+    margin: 12px 0 14px;
     font-weight: bold;
-    color: #374151;
+    color: #f3f4f6;
+    font-size: 18px;
 }
 
-ul {
-    padding: 0;
-    max-width: 100%;
-    margin: 30px auto 0;
-}
-
-li {
-    list-style: none;
-    background: #f9fafb;
-    margin-bottom: 12px;
-    padding: 14px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-li span {
-    flex: 1;
-    text-align: left;
-    color: #111827;
-    font-size: 15px;
-}
-
-li button {
-    background: #dc2626;
-}
-
-li button {
-    margin-left: 6px;
-}
-
-li button:nth-of-type(1) {
-    background: #2563eb;
-}
-
-li button:nth-of-type(2) {
-    background: #dc2626;
-}
 .progress-bar {
     width: 100%;
     max-width: 500px;
     height: 18px;
-    background: #cfcfcf; /* Nardo gray */
+    background: #cfcfcf;
     border-radius: 999px;
-    margin: 20px auto;
+    margin: 0 auto 28px;
     overflow: hidden;
     position: relative;
 }
@@ -108,20 +101,198 @@ li button:nth-of-type(2) {
 #progressFill {
     height: 100%;
     width: 0%;
-    background: #4a4a4a; /* darker Nardo gray */
+    background: linear-gradient(90deg, #7e8796, #b5bcc8);
     border-radius: 999px;
     position: relative;
     transition: width 0.35s ease;
 }
 
-/* triangle arrow tip */
 #progressFill::after {
     content: "";
     position: absolute;
     right: -10px;
     top: 50%;
     transform: translateY(-50%);
-    border-left: 10px solid #4a4a4a;
+    border-left: 10px solid #b5bcc8;
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
+}
+
+.week-labels {
+    display: grid;
+    grid-template-columns: repeat(7, 26px);
+    gap: 8px;
+    justify-content: start;
+    margin: 0 0 14px 46px;
+}
+
+.week-label {
+    font-size: 12px;
+    color: #d1d5db;
+    text-align: center;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+    background: #31415c;
+    margin-bottom: 16px;
+    padding: 18px 18px;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+}
+
+.completed {
+    background: rgba(34, 197, 94, 0.22) !important;
+}
+
+.completed span {
+    text-decoration: line-through;
+    opacity: 0.78;
+}
+
+.habit-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.habit-top-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 26px;
+}
+
+.habit-checkbox {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: #22c55e;
+    display: block;
+}
+
+.habit-top-row span {
+    flex: 1;
+    text-align: left;
+    font-size: 16px;
+    color: #f9fafb;
+    word-break: break-word;
+    line-height: 1.35;
+}
+
+.habit-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.habit-actions button {
+    min-width: 72px;
+    padding: 12px 14px;
+}
+
+.habit-actions button:first-child {
+    background: #2563eb;
+}
+
+.habit-actions button:last-child {
+    background: #dc2626;
+}
+
+.week-inline {
+    display: grid;
+    grid-template-columns: repeat(7, 26px);
+    gap: 8px;
+    margin-left: 32px;
+}
+
+.day {
+    width: 26px;
+    height: 26px;
+    background: #5d6a80;
+    border-radius: 8px;
+}
+
+.day.done {
+    background: #4ade80;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+.pop {
+    animation: pop 0.25s ease;
+}
+
+@media (max-width: 700px) {
+    body {
+        padding: 14px;
+    }
+
+    .container {
+        padding: 22px 18px;
+        margin: 10px auto;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .input-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    input,
+    #addHabitButton,
+    #themeToggle {
+        width: 100%;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .habit-actions {
+        width: 100%;
+    }
+
+    .habit-actions button {
+        flex: 1;
+    }
+
+    .week-labels {
+        grid-template-columns: repeat(7, 22px);
+        gap: 6px;
+        margin-left: 42px;
+    }
+
+    .week-inline {
+        grid-template-columns: repeat(7, 22px);
+        gap: 6px;
+        margin-left: 32px;
+    }
+
+    .day {
+        width: 22px;
+        height: 22px;
+    }
 }
