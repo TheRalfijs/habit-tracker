@@ -1,58 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge Tracker</title>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>Forge Tracker</title>
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Forge Tracker">
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Forge Tracker" />
 
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <button id="themeToggle">Dark Mode</button>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-icon">🔥</div>
+        <div>
+          <h1 class="app-title">Forge Tracker</h1>
+          <p class="app-subtitle">Discipline, tracked daily</p>
+        </div>
+      </div>
 
-        <h1 id="appTitle">FORGE TRACKER</h1>
-        <p class="subtitle">Build discipline every day</p>
+      <button id="themeToggle" class="ghost-button" type="button">Dark Mode</button>
+    </header>
 
-        <div class="input-row">
-            <input id="habitInput" type="text" placeholder="Enter habit">
-
-            <select id="categorySelect">
-                <option value="Health">Health</option>
-                <option value="Mind">Mind</option>
-                <option value="Work">Work</option>
-                <option value="Faith">Faith</option>
-                <option value="Finance">Finance</option>
-                <option value="Other">Other</option>
-            </select>
-
-            <button id="addHabitButton" onclick="addHabit()">Add Habit</button>
+    <main class="content">
+      <section class="summary-card">
+        <div class="summary-top">
+          <div>
+            <p class="eyebrow">Today</p>
+            <h2 id="summaryHeadline">Keep your streak alive</h2>
+          </div>
+          <div class="score-pill">
+            <span class="score-label">Score</span>
+            <span id="disciplineScore">0</span>
+          </div>
         </div>
 
-        <p id="progressText">0 of 0 habits completed — 0%</p>
+        <div class="summary-stats">
+          <div class="summary-stat">
+            <span class="summary-stat-label">Done</span>
+            <span id="summaryDone" class="summary-stat-value">0 / 0</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Top streak</span>
+            <span id="summaryTopStreak" class="summary-stat-value">0 days</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Best category</span>
+            <span id="summaryBestCategory" class="summary-stat-value">—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="composer-card">
+        <div class="input-stack">
+          <input id="habitInput" type="text" placeholder="Add a habit" />
+          <select id="categorySelect">
+            <option value="Health">Health</option>
+            <option value="Mind">Mind</option>
+            <option value="Work">Work</option>
+            <option value="Faith">Faith</option>
+            <option value="Finance">Finance</option>
+            <option value="Other">Other</option>
+          </select>
+          <button id="addHabitButton" type="button">Add Habit</button>
+        </div>
+      </section>
+
+      <section class="progress-card">
+        <div class="progress-header">
+          <span class="eyebrow">Progress</span>
+          <span id="progressText">0 of 0 habits completed — 0%</span>
+        </div>
 
         <div class="progress-bar">
-            <div id="progressFill"></div>
+          <div id="progressFill"></div>
         </div>
 
         <div class="data-actions">
-    <button id="exportButton">Export Data</button>
-    <button id="importButton">Import Data</button>
-    <input type="file" id="importFile" accept=".json" hidden>
-</div>
+          <button id="exportButton" type="button">Export</button>
+          <button id="importButton" type="button">Import</button>
+          <input type="file" id="importFile" accept=".json" hidden />
+        </div>
+      </section>
 
-<div id="weekLabels" class="week-labels"></div>
+      <section class="tracker-card">
+        <div id="weekLabels" class="week-labels"></div>
+        <ul id="habitList" class="habit-list"></ul>
+      </section>
+    </main>
+  </div>
 
-        <ul id="habitList"></ul>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
