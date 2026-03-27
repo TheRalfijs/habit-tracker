@@ -46,17 +46,6 @@ function resetHabitsIfNewDay() {
   }
 }
 
-function getMondayOfCurrentWeek() {
-  const current = new Date(getCurrentDateObject());
-  const day = current.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
-
-  current.setHours(0, 0, 0, 0);
-  current.setDate(current.getDate() + diff);
-
-  return current;
-}
-
 function calculateStreak(history, isDoneToday) {
   if (!Array.isArray(history) || history.length === 0) return 0;
 
@@ -78,151 +67,41 @@ function calculateStreak(history, isDoneToday) {
   return streak;
 }
 
-function calculateStats(history) {
-  if (!history || history.length === 0) {
-    return {
-      bestStreak: 0,
-      completionRate: 0
-    };
-  }
-
-  const sorted = [...history].sort();
-  let bestStreak = 1;
-  let current = 1;
-
-  for (let i = 1; i < sorted.length; i++) {
-    const prev = new Date(sorted[i - 1]);
-    const curr = new Date(sorted[i]);
-    const diff = (curr - prev) / (1000 * 60 * 60 * 24);
-
-    if (diff === 1) {
-      current++;
-      if (current > bestStreak) bestStreak = current;
-    } else {
-      current = 1;
-    }
-  }
-
-  const completionRate = Math.min(100, Math.round((history.length / 30) * 100));
-
-  return {
-    bestStreak,
-    completionRate
-  };
-}
-
-function getAchievementBadge(streak) {
-  if (streak >= 100) return "👑 Unbreakable";
-  if (streak >= 30) return "⚔️ Disciplined";
-  if (streak >= 7) return "🔥 On Fire";
-  if (streak >= 1) return "🌱 First Step";
-  return "";
-}
-
-function updateProgress() {
-  const progressText = document.getElementById("progressText");
-  const progressFill = document.getElementById("progressFill");
-
-  const total = habits.length;
-  const completed = habits.filter(habit => habit.done).length;
-  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-  progressText.textContent = `${completed} of ${total} habits completed — ${percent}%`;
-  if (progressFill) {
-    progressFill.style.width = `${percent}%`;
-  }
-}
-
-function updateTodaySummary() {
-  const total = habits.length;
-  const completed = habits.filter(habit => habit.done).length;
-  const score = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-  const doneEl = document.getElementById("summaryDone");
-  const scoreEl = document.getElementById("disciplineScore");
-  const topStreakEl = document.getElementById("summaryTopStreak");
-  const bestCategoryEl = document.getElementById("summaryBestCategory");
-  const headlineEl = document.getElementById("summaryHeadline");
-
-  const topStreak = habits.reduce((max, habit) => {
+function getTopStreak() {
+  return habits.reduce((max, habit) => {
     const streak = calculateStreak(habit.history, habit.done);
     return Math.max(max, streak);
   }, 0);
-
-  const categoryCount = {};
-  habits.forEach(habit => {
-    if (!categoryCount[habit.category]) {
-      categoryCount[habit.category] = { total: 0, done: 0 };
-    }
-    categoryCount[habit.category].total++;
-    if (habit.done) categoryCount[habit.category].done++;
-  });
-
-  let bestCategory = "—";
-  let bestRatio = -1;
-
-  Object.entries(categoryCount).forEach(([category, data]) => {
-    const ratio = data.total > 0 ? data.done / data.total : 0;
-    if (ratio > bestRatio) {
-      bestRatio = ratio;
-      bestCategory = category;
-    }
-  });
-
-  let headline = "Start strong today";
-  if (score === 100 && total > 0) headline = "Perfect day. Keep it burning.";
-  else if (score >= 70) headline = "Strong momentum today.";
-  else if (score >= 40) headline = "Solid start. Push a bit more.";
-  else if (total === 0) headline = "Create your first habit.";
-  else headline = "Get one more habit done now.";
-
-  doneEl.textContent = `${completed} / ${total}`;
-  scoreEl.textContent = score;
-  topStreakEl.textContent = `${topStreak} days`;
-  bestCategoryEl.textContent = bestCategory;
-  headlineEl.textContent = headline;
 }
 
-function renderWeekLabels() {
-  const weekLabels = document.getElementById("weekLabels");
-  if (!weekLabels) return;
+function updateHeaderSummary() {
+  const total = habits.length;
+  const completed = habits.filter(habit => habit.done).length;
+  const topStreak = getTopStreak();
 
-  weekLabels.innerHTML = "";
-  ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach(labelText => {
-    const label = document.createElement("div");
-    label.classList.add("week-label");
-    label.textContent = labelText;
-    weekLabels.appendChild(label);
-  });
-}
+  const progressText = document.getElementById("todayProgress");
+  const streakText = document.getElementById("topStreakText");
+  const subtitleText = document.getElementById("subtitleText");
+  const habitCountText = document.getElementById("habitCountText");
+  const progressFill = document.getElementById("progressFill");
 
-function createWeekSquares(history) {
-  const weekContainer = document.createElement("div");
-  weekContainer.classList.add("week-inline");
+  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-  const monday = getMondayOfCurrentWeek();
-  const today = getCurrentDateObject();
-  today.setHours(0, 0, 0, 0);
+  progressText.textContent = `${completed} / ${total}`;
+  streakText.textContent = `${topStreak} days`;
+  habitCountText.textContent = `${total} active`;
 
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(monday);
-    day.setDate(monday.getDate() + i);
-    day.setHours(0, 0, 0, 0);
-
-    const dateString = getDateString(day);
-    const square = document.createElement("div");
-    square.classList.add("day");
-
-    if (history.includes(dateString)) {
-      square.classList.add("done");
-    } else if (day < today) {
-      square.classList.add("missed");
-    }
-
-    weekContainer.appendChild(square);
+  if (percent === 100 && total > 0) {
+    subtitleText.textContent = "Perfect day. Steel your discipline.";
+  } else if (percent >= 50) {
+    subtitleText.textContent = "Strong momentum. Finish the forge.";
+  } else if (total === 0) {
+    subtitleText.textContent = "Start with one habit.";
+  } else {
+    subtitleText.textContent = "Keep the chain alive.";
   }
 
-  return weekContainer;
+  progressFill.style.width = `${percent}%`;
 }
 
 function editHabit(index) {
@@ -243,7 +122,6 @@ function editNotes(index) {
 
   habits[index].notes = newNote;
   saveHabits();
-  renderHabits();
 }
 
 function deleteHabit(index) {
@@ -267,6 +145,7 @@ function createHabitRow(habit, index) {
 
   checkbox.onchange = function () {
     const today = getTodayDate();
+
     habits[index].done = checkbox.checked;
 
     if (checkbox.checked) {
@@ -293,34 +172,28 @@ function createHabitRow(habit, index) {
   const topRow = document.createElement("div");
   topRow.classList.add("habit-top-row");
 
-  const title = document.createElement("span");
-  const streak = calculateStreak(habit.history, habit.done);
-  const stats = calculateStats(habit.history);
-  const badge = getAchievementBadge(streak);
+  const textBlock = document.createElement("div");
+  textBlock.classList.add("habit-text-block");
 
-  title.textContent = `${habit.name} — 🔥 ${streak} | 🏆 ${stats.bestStreak} | 📊 ${stats.completionRate}%`;
+  const name = document.createElement("div");
+  name.classList.add("habit-name");
+  name.textContent = habit.name;
+
+  const meta = document.createElement("div");
+  meta.classList.add("habit-meta");
+
+  const streak = calculateStreak(habit.history, habit.done);
+  const category = habit.category || "Other";
+
+  meta.textContent = `${streak} day streak • ${category}`;
+
+  textBlock.appendChild(name);
+  textBlock.appendChild(meta);
 
   topRow.appendChild(checkbox);
-  topRow.appendChild(title);
-
-  const weekContainer = createWeekSquares(habit.history);
+  topRow.appendChild(textBlock);
 
   main.appendChild(topRow);
-  main.appendChild(weekContainer);
-
-  if (badge) {
-    const badgeElement = document.createElement("div");
-    badgeElement.classList.add("habit-badge");
-    badgeElement.textContent = badge;
-    main.appendChild(badgeElement);
-  }
-
-  if (habit.notes) {
-    const note = document.createElement("div");
-    note.classList.add("habit-note");
-    note.textContent = "📝 " + habit.notes;
-    main.appendChild(note);
-  }
 
   const actions = document.createElement("div");
   actions.classList.add("habit-actions");
@@ -332,10 +205,10 @@ function createHabitRow(habit, index) {
     editHabit(index);
   };
 
-  const noteButton = document.createElement("button");
-  noteButton.type = "button";
-  noteButton.textContent = "Notes";
-  noteButton.onclick = function () {
+  const notesButton = document.createElement("button");
+  notesButton.type = "button";
+  notesButton.textContent = "Notes";
+  notesButton.onclick = function () {
     editNotes(index);
   };
 
@@ -347,7 +220,7 @@ function createHabitRow(habit, index) {
   };
 
   actions.appendChild(editButton);
-  actions.appendChild(noteButton);
+  actions.appendChild(notesButton);
   actions.appendChild(deleteButton);
 
   li.appendChild(main);
@@ -356,18 +229,17 @@ function createHabitRow(habit, index) {
   return li;
 }
 
-function createCategoryHeader(category) {
-  const header = document.createElement("li");
-  header.classList.add("category-header");
-  header.textContent = category;
-  return header;
-}
-
 function renderHabits() {
   const habitList = document.getElementById("habitList");
+  const emptyState = document.getElementById("emptyState");
+
   habitList.innerHTML = "";
 
-  renderWeekLabels();
+  if (habits.length === 0) {
+    emptyState.classList.add("show");
+  } else {
+    emptyState.classList.remove("show");
+  }
 
   const groupedHabits = {};
   CATEGORY_ORDER.forEach(category => {
@@ -376,15 +248,11 @@ function renderHabits() {
 
   habits.forEach((habit, index) => {
     const category = habit.category || "Other";
-    if (!groupedHabits[category]) groupedHabits[category] = [];
     groupedHabits[category].push({ habit, index });
   });
 
   CATEGORY_ORDER.forEach(category => {
     if (groupedHabits[category].length === 0) return;
-
-    const categoryHeader = createCategoryHeader(category);
-    habitList.appendChild(categoryHeader);
 
     groupedHabits[category].forEach(item => {
       const row = createHabitRow(item.habit, item.index);
@@ -392,8 +260,7 @@ function renderHabits() {
     });
   });
 
-  updateProgress();
-  updateTodaySummary();
+  updateHeaderSummary();
 }
 
 function addHabit() {
@@ -431,99 +298,63 @@ document.getElementById("addHabitButton").addEventListener("click", addHabit);
 const themeToggle = document.getElementById("themeToggle");
 
 function updateThemeButtonText() {
-  themeToggle.textContent = document.body.classList.contains("dark")
-    ? "Light Mode"
-    : "Dark Mode";
+  themeToggle.textContent = document.body.classList.contains("light") ? "☾" : "☼";
 }
 
 function applySavedTheme() {
   const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light");
   }
+
   updateThemeButtonText();
 }
 
 themeToggle.addEventListener("click", function () {
-  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
+
   localStorage.setItem(
     "theme",
-    document.body.classList.contains("dark") ? "dark" : "light"
+    document.body.classList.contains("light") ? "light" : "dark"
   );
-  renderHabits();
+
   updateThemeButtonText();
 });
 
-const exportButton = document.getElementById("exportButton");
-const importButton = document.getElementById("importButton");
-const importFile = document.getElementById("importFile");
+function updateDateTimeHeader() {
+  const now = getCurrentDateObject();
 
-if (exportButton && importButton && importFile) {
-  exportButton.addEventListener("click", function () {
-    const data = {
-      habits,
-      exportedAt: new Date().toISOString()
-    };
+  const dayElement = document.getElementById("currentDay");
+  const dateTimeElement = document.getElementById("currentDateTime");
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json"
-    });
+  if (!dayElement || !dateTimeElement) return;
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "forge-tracker-backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
+  const dayName = now.toLocaleDateString("en-US", {
+    weekday: "long"
   });
 
-  importButton.addEventListener("click", function () {
-    importFile.click();
+  const dateText = now.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long"
   });
 
-  importFile.addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-      try {
-        const importedData = JSON.parse(e.target.result);
-
-        if (!importedData.habits || !Array.isArray(importedData.habits)) {
-          alert("Invalid backup file.");
-          return;
-        }
-
-        habits = importedData.habits;
-        normalizeHabits();
-        saveHabits();
-        renderHabits();
-        alert("Data imported successfully.");
-      } catch {
-        alert("Failed to import file.");
-      }
-    };
-
-    reader.readAsText(file);
-    importFile.value = "";
+  const timeText = now.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
   });
+
+  dayElement.textContent = dayName;
+  dateTimeElement.textContent = `${dateText} • ${timeText}`;
 }
 
 normalizeHabits();
 applySavedTheme();
+updateDateTimeHeader();
 resetHabitsIfNewDay();
 renderHabits();
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => {
-        console.log("Service Worker registered");
-      })
-      .catch(error => {
-        console.log("Service Worker registration failed:", error);
-      });
-  });
-}
+setInterval(() => {
+  updateDateTimeHeader();
+}, 60000);

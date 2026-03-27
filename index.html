@@ -8,7 +8,7 @@
   />
   <title>Forge Tracker</title>
 
-  <meta name="theme-color" content="#0b1220" />
+  <meta name="theme-color" content="#0F0F10" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Forge Tracker" />
@@ -21,48 +21,41 @@
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <div class="brand-wrap">
-        <div class="brand-icon">🔥</div>
-        <div>
-          <h1 class="app-title">Forge Tracker</h1>
-          <p class="app-subtitle">Discipline, tracked daily</p>
-        </div>
-      </div>
+      <div class="brand-block">
+  <p class="eyebrow">Forge Clique</p>
+  <h1 id="currentDay">Thursday</h1>
+  <p id="currentDateTime" class="subtitle">27 March • 22:41</p>
+  <p id="subtitleText" class="subtitle subtitle-secondary">Keep the chain alive.</p>
+    </div>
 
-      <button id="themeToggle" class="ghost-button" type="button">Dark Mode</button>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle theme">
+        ☼
+      </button>
     </header>
 
     <main class="content">
-      <section class="summary-card">
-        <div class="summary-top">
+      <section class="today-card">
+        <div class="today-row">
           <div>
-            <p class="eyebrow">Today</p>
-            <h2 id="summaryHeadline">Keep your streak alive</h2>
+            <p class="small-label">Completed</p>
+            <p id="todayProgress" class="big-number">0 / 0</p>
           </div>
-          <div class="score-pill">
-            <span class="score-label">Score</span>
-            <span id="disciplineScore">0</span>
+
+          <div class="divider"></div>
+
+          <div>
+            <p class="small-label">Top streak</p>
+            <p id="topStreakText" class="big-number">0 days</p>
           </div>
         </div>
 
-        <div class="summary-stats">
-          <div class="summary-stat">
-            <span class="summary-stat-label">Done</span>
-            <span id="summaryDone" class="summary-stat-value">0 / 0</span>
-          </div>
-          <div class="summary-stat">
-            <span class="summary-stat-label">Top streak</span>
-            <span id="summaryTopStreak" class="summary-stat-value">0 days</span>
-          </div>
-          <div class="summary-stat">
-            <span class="summary-stat-label">Best category</span>
-            <span id="summaryBestCategory" class="summary-stat-value">—</span>
-          </div>
+        <div class="progress-track">
+          <div id="progressFill" class="progress-fill"></div>
         </div>
       </section>
 
-      <section class="composer-card">
-        <div class="input-stack">
+      <section class="composer-sheet">
+        <div class="composer-grid">
           <input id="habitInput" type="text" placeholder="Add a habit" />
           <select id="categorySelect">
             <option value="Health">Health</option>
@@ -72,30 +65,23 @@
             <option value="Finance">Finance</option>
             <option value="Other">Other</option>
           </select>
-          <button id="addHabitButton" type="button">Add Habit</button>
+          <button id="addHabitButton" type="button">Forge Habit</button>
         </div>
       </section>
 
-      <section class="progress-card">
-        <div class="progress-header">
-          <span class="eyebrow">Progress</span>
-          <span id="progressText">0 of 0 habits completed — 0%</span>
+      <section class="habit-section">
+        <div class="section-header">
+          <p class="eyebrow">Habits</p>
+          <p id="habitCountText" class="section-meta">0 active</p>
         </div>
 
-        <div class="progress-bar">
-          <div id="progressFill"></div>
-        </div>
-
-        <div class="data-actions">
-          <button id="exportButton" type="button">Export</button>
-          <button id="importButton" type="button">Import</button>
-          <input type="file" id="importFile" accept=".json" hidden />
-        </div>
-      </section>
-
-      <section class="tracker-card">
-        <div id="weekLabels" class="week-labels"></div>
         <ul id="habitList" class="habit-list"></ul>
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">🔥</div>
+          <h2>No habits yet</h2>
+          <p>Create one habit and start forging consistency.</p>
+        </div>
       </section>
     </main>
   </div>

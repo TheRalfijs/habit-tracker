@@ -1,4 +1,4 @@
-const CACHE_NAME = "forge-tracker-v2";
+const CACHE_NAME = "forge-tracker-mobile-v1";
 const urlsToCache = [
   "./",
   "./index.html",
@@ -28,8 +28,6 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      return cachedResponse || fetch(event.request);
-    })
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
